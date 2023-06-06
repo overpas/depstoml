@@ -16,6 +16,6 @@ jobs:
       - name: Attach jar to latest release
         uses: xresloader/upload-to-github-release@v1.3.12
         env:
-          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           file: "depstoml/build/libs/*.jar"
