@@ -10,7 +10,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class DepstomlTest {
+class ConversionTest {
 
     private val tomlPath = "build/generated/main/kotlin/by/overpass/depstoml/libs.versions.toml"
 

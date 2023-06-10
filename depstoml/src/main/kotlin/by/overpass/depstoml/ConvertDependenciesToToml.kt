@@ -7,6 +7,9 @@ import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import java.io.File
+import java.nio.file.Files
+import kotlin.io.path.Path
+import kotlin.io.path.extension
 
 class ConvertDependenciesToToml : CliktCommand(
     name = "depstoml",
@@ -29,20 +32,35 @@ class ConvertDependenciesToToml : CliktCommand(
         help = "order libraries lexicographically",
     ).flag(default = false)
 
+    private val replaceUsages by option(
+        names = arrayOf("-r", "--replace-usages"),
+        help = "replace artifact usages with new identifiers"
+    ).flag(default = false)
+
     override fun run() {
         dependenciesFile.asKotlinFile()
             ?.extractDepsTree()
-            ?.createTomlConfig(
-                orderLexicographically = orderLexicographically,
-            )
-            ?.writeTo(
-                tomlFile.apply {
-                    if (!exists()) {
-                        parentFile?.mkdirs()
-                        createNewFile()
+            ?.apply {
+                createTomlConfig(orderLexicographically)
+                    .writeTo(
+                        tomlFile.apply {
+                            if (!exists()) {
+                                parentFile?.mkdirs()
+                                createNewFile()
+                            }
+                        },
+                    )
+                if (replaceUsages) {
+                    val replacements = findReplacements()
+                    Files.find(
+                        Path(""),
+                        Int.MAX_VALUE,
+                        { path, _ -> path.extension == "kts" },
+                    ).forEach { path ->
+                        path.replaceAll(replacements)
                     }
-                },
-            )
+                }
+            }
             ?: System.err.println("Kotlin Dependencies object not found in file: ${dependenciesFile.path}")
     }
 }
