@@ -19,6 +19,7 @@ Sample toml value: `gradle/libs.versions.toml`
 
 #### Options
 - `-o`, `--order-lexicographically` - if you want to sort the dependencies lexicographically
+- `-r`, `--replace-usages` - if you want to replace usages of old dependencies with new ones in build.gradle.kts files
 
 #### Arguments
 - `deps` - path to Kotlin dependencies file

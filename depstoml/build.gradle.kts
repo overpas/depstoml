@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "by.overpass"
-version = "0.1"
+version = "0.2"
 
 application {
     mainClass.set("by.overpass.depstoml.MainKt")

@@ -96,7 +96,7 @@ private fun MutableList<MutableList<String>>.format(orderLexicographically: Bool
             if (path.matches(libraryRegex) || path.matches(pluginRegex)) {
                 formattedList += path
             } else {
-                formattedList += separateIds(this[i][j])
+                formattedList += separateIds(path)
             }
         }
         this[i] = formattedList
@@ -104,6 +104,25 @@ private fun MutableList<MutableList<String>>.format(orderLexicographically: Bool
     if (orderLexicographically) {
         sortBy(MutableList<String>::joinToString)
     }
+}
+
+fun DepsTreeNode.findReplacements(): Map<String, String> = getAllLeafPaths()
+    .findReplacements()
+
+private fun List<List<String>>.findReplacements(): Map<String, String> {
+    val map = mutableMapOf<String, String>()
+    for (path in this) {
+        val oldIdentifier = path
+            .subList(1, path.size - 1)
+            .joinToString(".")
+        val newPath = mutableListOf("libs")
+        for (j in 2 until path.size - 1) {
+            newPath += separateIds(path[j])
+        }
+        val newIdentifier = newPath.joinToString(".")
+        map += oldIdentifier to newIdentifier
+    }
+    return map
 }
 
 private fun createVersion(path: List<String>): Version {
