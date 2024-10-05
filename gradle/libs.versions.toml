@@ -1,6 +1,6 @@
 [versions]
 kotlin = "1.8.21"
-clikt = "3.5.4"
+clikt = "5.0.1"
 detekt = "1.23.7"
 
 [libraries]
